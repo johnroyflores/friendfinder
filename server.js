@@ -1,29 +1,32 @@
 // Dependencies
 // =============================================================
 var express = require('express');
-var bodyParser = require('body-parser');
 var path = require('path');
-var PORT = 8080;
+var bodyParser = require('body-parser');
+var htmlRoutes = require('./app/routing/html-routes.js');
+var ApiRoutes = require('./app/routing/api-routes.js');
+var friends = require('./app/data/friends.js');
+
+
+
 var app = express();
 
-
+// Sets up the Express app to handle data parsing 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 
-
-//html routes
-app.use('/', require('./app/routing/html-routes'));
-app.use('/add', require('./app/routing/html-routes'));
-app.use('/survey', require('./app/routing/html-routes'));
-
-//api routes
-app.use('/api/', require('./app/routing/api-routes'));
+var htmlServing = new htmlRoutes();
+var api = new ApiRoutes();
 
 
-// Starts the server to begin listening
-// =============================================================
-app.listen(PORT, function(){
-    console.log('App listening on PORT ' + PORT);
-})
+// serving up some sweet, sweet HTML
+htmlServing.default(app, path);
+htmlServing.survey(app, path);
+
+//serving up some JSON
+api.getApi(app, friends);''
+api.postAPI(app, friends);
+
+app.listen(process.env.PORT || 3030);
