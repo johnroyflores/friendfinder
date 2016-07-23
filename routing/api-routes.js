@@ -1,5 +1,5 @@
 
-var friendList = require('../data/friends.js');
+var friendList = require('../app/data/friends.js');
 var path = require('path');
 
 //==============================================
@@ -45,7 +45,7 @@ var ApiRoutes = function() {
         });
     }
 };
-
+//you da man Chance
 function comparator(friends, newUser, differences) {
     var curUserIndex = 0;
     while (curUserIndex < friends.length) {
